@@ -3,12 +3,7 @@
   "main": "polymer2-vo-location-selector.html",
   "dependencies": {
     "polymer": "Polymer/polymer#^2.0.0",
-    "vaadin-lumo-styles": "^1.0.0"
-  },
-  "devDependencies": {
-    "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^2.0.0",
-    "web-component-tester": "Polymer/web-component-tester#^6.0.0",
-    "webcomponentsjs": "webcomponents/webcomponentsjs#^1.0.0",
+    "vaadin-lumo-styles": "^1.0.0",
     "geo-location": "^2.0.2",
     "paper-button": "^2.1.0",
     "vo-search-location": "https://github.com/DOV-Vlaanderen/polymer2-vo-search-location.git",
@@ -16,6 +11,11 @@
     "iron-icon": "^2.1.0",
     "iron-media-query": "^2.1.0",
     "iron-iconset-svg": "PolymerElements/iron-iconset-svg#^2.0.0"
+  },
+  "devDependencies": {
+    "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^2.0.0",
+    "web-component-tester": "Polymer/web-component-tester#^6.0.0",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^1.0.0"
   },
   "resolutions": {
     "polymer": "^2.0.0"
