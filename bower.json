@@ -1,5 +1,6 @@
 {
   "name": "vo-location-selector",
+  "main": "polymer2-vo-location-selector.html",
   "dependencies": {
     "polymer": "Polymer/polymer#^2.0.0",
     "vaadin-lumo-styles": "^1.0.0"
