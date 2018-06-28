@@ -1,0 +1,273 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../geo-location/geo-location.html">
+<link rel="import" href="../paper-button/paper-button.html">
+<link rel="import" href="../vo-search-location/vo-search-location.html">
+<link rel="import" href="../iron-icon/iron-icon.html">
+<link rel="import" href="../iron-collapse/iron-collapse.html">
+<link rel="import" href="../iron-media-query/iron-media-query.html">
+
+<link rel="import" href="../vaadin-lumo-styles/color.html">
+
+<link rel="import" href="polymer2-vo-location-selector-icons.html">
+
+
+<dom-module id="polymer2-vo-location-selector">
+  <template>
+    <style include="lumo-color">
+      :host {
+        display: block;
+        min-width: 288px;
+        max-width: 472px;
+      }
+
+      .bottombar {
+        padding-top: 4px;
+        padding-bottom: 4px;
+
+        background-color: var(--lumo-base-color);
+        color: var(--lumo-contrast);
+
+        z-index: 10000;
+
+        border-radius: 3px;
+      }
+
+      #buttonbar {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+      }
+      vo-search-location{
+        padding-top: 0px;
+        padding-bottom: 0px;
+      }
+
+      #collapseSearch {
+        grid-column: 1 / 4;
+      }
+
+      /*hide the button bar when the keyboar is on screen*/
+      @media screen and (max-height: 270px) {
+        .buttonbar paper-button{
+          display: none;
+        }
+      }
+      /**/
+      @media screen and (min-width: 480px) {
+        #collapseSearch {
+          grid-column: 1;
+          width: 280px;
+
+        }
+        #searchButton{
+          display: none;
+        }
+      }
+    </style>
+
+    <iron-media-query query="(min-width: 480px)" on-query-matches-changed="handleQueryChange"></iron-media-query>
+    <!--Button bar-->
+    <iron-collapse opened="{{opened}}" class="bottombar" theme$="[[buttonBarTheme]]">
+      <geo-location on-position-changed="handleGeoLocationChange"
+                    on-geo-error="handleGeoLocationError"
+                    idle="[[!useGeolocation]]">
+
+      </geo-location>
+
+
+
+      <div id="buttonbar">
+
+        <iron-collapse id="collapseSearch" opened="{{searchActive}}">
+          <vo-search-location on-search-location-changed="handleSearchLocationChange"
+                              allow-custom-value="true"
+                              focus="{{searchActive}}">
+          </vo-search-location>
+        </iron-collapse>
+
+        <paper-button  id="searchButton" active="{{useCrab}}" on-click="handleSearchClicked">
+          <iron-icon icon="icons:search"></iron-icon>
+
+        </paper-button>
+
+        <paper-button active="{{useGeolocation}}" on-click="handleAutoLocationClicked">
+          <iron-icon icon="my-icons:my-location"></iron-icon>
+
+        </paper-button>
+
+        <paper-button active="{{useMap}}" on-click="handleChooseLocationClicked">
+          <iron-icon icon="my-icons:pin-drop"></iron-icon>
+
+        </paper-button>
+      </div>
+    </iron-collapse>
+
+  </template>
+
+  <script>
+    class VoMapLocationSelector extends Polymer.Element {
+      static get is() {
+        return 'polymer2-vo-location-selector';
+      }
+
+      static get properties() {
+        return {
+          useGeolocation: {
+            type: Boolean,
+            value: false
+          },
+          useMap: {
+            type: Boolean,
+            value: false
+          },
+          useCrab: {
+            type: Boolean,
+            value: false
+          },
+          buttonBarTheme: {
+            type: String,
+            value: "dark"
+          },
+          opened : {
+            type: Boolean,
+            value: false
+          }
+        };
+      }
+
+
+      //-----------------------------------------------------------------------------------------------//
+      //-- Handle Buttons Clicks  ------------ --------------------------------------------------------//
+      //-----------------------------------------------------------------------------------------------//
+      /**
+       * Search Button clicked event.
+       * @param event
+       * @param object
+       */
+      handleSearchClicked() {
+        this.$.collapseSearch.toggle();
+
+        this.useCrab = true;
+        this.useGeolocation = false;
+        this.useMap = false;
+
+      }
+
+      /**
+       * Geolocation Button clicked event.
+       * @param event
+       * @param object
+       */
+      handleAutoLocationClicked() {
+        this.useMap = false;
+        this.useGeolocation = true;
+        this.disableSearch()
+
+      }
+
+      /**
+       * Place Marker Button clicked event.
+       * @param event
+       * @param object
+       */
+      handleChooseLocationClicked() {
+        this.useGeolocation = false;
+        this.useMap = true;
+        this.disableSearch()
+
+        this.fireLocationSelectLocation();
+      }
+
+      //-----------------------------------------------------------------------------------------------//
+      //-- Handle events from child components --------------------------------------------------------//
+      //-----------------------------------------------------------------------------------------------//
+
+      /**
+       * Handle Crab Search event: location change.
+       *
+       */
+      handleSearchLocationChange(event) {
+        //console.log("location Changed from crab.");
+        //console.log("location:" + event.detail.latitude + " - " + event.detail.longitude);
+        this.disableSearch();
+        this.fireLocationUpdated("crab-search", event.detail.latitude, event.detail.longitude, 17);
+      }
+
+
+      /**
+       * Handle Geolocation event: location change.
+       * */
+      handleGeoLocationChange(event, object) {
+        if (object.value && this.useGeolocation) {
+          //console.log("Navigating to geolocator point");
+          //console.log("location:" + object.value.coords.latitude + " - " + object.value.coords.longitude);
+          this.fireLocationUpdated("geolocation-api", object.value.coords.latitude, object.value.coords.longitude, 17);
+        }
+      }
+
+
+      handleGeoLocationError(e) {
+        this.dispatchEvent(new CustomEvent('geo-error', {
+          detail: e.detail
+        }));
+      }
+
+      /**
+       * Handle media query.
+       * @param e
+       */
+      handleQueryChange(e){
+        this.phoneView= !e.detail.value
+        if(this.phoneView) {
+          this.$.collapseSearch.opened = false;
+        } else {
+          this.handleSearchClicked();
+          this.$.collapseSearch.opened = true;
+        }
+      }
+      //-----------------------------------------------------------------------------------------------//
+      //-- Fire events --------------------------------------------------------------------------------//
+      //-----------------------------------------------------------------------------------------------//
+
+      fireLocationUpdated(source, lat, long, zoom) {
+        this.dispatchEvent(new CustomEvent('location-updated', {
+          detail: {
+            source: source,
+            latitude: lat,
+            longitude: long,
+            zoom: zoom
+          }
+        }));
+      }
+
+      fireLocationSelectLocation() {
+        this.dispatchEvent(new CustomEvent('start-location-selection', {
+          detail: {
+          }
+        }));
+      }
+
+      //-----------------------------------------------------------------------------------------------//
+      //-- Private ------------------------------------------------------------------------------------//
+      //-----------------------------------------------------------------------------------------------//
+
+      disableSearch(){
+        this.useCrab = false;
+        if(this.phoneView) {
+          this.$.collapseSearch.opened = false;
+        }
+      }
+    }
+
+    window.customElements.define(VoMapLocationSelector.is, VoMapLocationSelector);
+  </script>
+</dom-module>
