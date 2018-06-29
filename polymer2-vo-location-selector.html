@@ -43,7 +43,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       #buttonbar {
+        display: -ms-grid;
         display: grid;
+        -ms-grid-columns: 1fr 1fr 1fr;
         grid-template-columns: repeat(3, 1fr);
       }
       vo-search-location{
@@ -52,6 +54,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       #collapseSearch {
+        -ms-grid-column: 1;
+        -ms-grid-column-span: 3;
         grid-column: 1 / 4;
       }
 
@@ -64,6 +68,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       /**/
       @media screen and (min-width: 480px) {
         #collapseSearch {
+          -ms-grid-column: 1;
           grid-column: 1;
           width: 280px;
 
