@@ -91,18 +91,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           </vo-search-location>
         </iron-collapse>
 
-        <paper-button  id="searchButton" active="{{useCrab}}" on-click="handleSearchClicked">
+        <paper-button  id="searchButton" name="Zoek Adres" active="{{useCrab}}" on-click="handleSearchClicked">
           <iron-icon icon="icons:search"></iron-icon>
 
         </paper-button>
 
-        <paper-button active="{{useGeolocation}}" on-click="handleAutoLocationClicked">
-          <iron-icon icon="vo-location-icons:my-location"></iron-icon>
+        <paper-button active="{{useGeolocation}}" name="Zoom GPS locatie" on-click="handleAutoLocationClicked">
+          <iron-icon icon="my-icons:my-location"></iron-icon>
 
         </paper-button>
 
-        <paper-button active="{{useMap}}" on-click="handleChooseLocationClicked">
-          <iron-icon icon="vo-location-icons:pin-drop"></iron-icon>
+        <paper-button active="{{useMap}}" name="Manuele plaatsbepaling" on-click="handleChooseLocationClicked">
+          <iron-icon icon="my-icons:pin-drop"></iron-icon>
 
         </paper-button>
       </div>
