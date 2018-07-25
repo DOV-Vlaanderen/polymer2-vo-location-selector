@@ -11,6 +11,7 @@ Responsive Toolbar for selecting a lat long location on a map.
 * narrow view opened
 
 ![narrow-view-open](https://github.com/DOV-Vlaanderen/polymer2-vo-location-selector/blob/assets/assets/images/vo-location-selector-narrow-open.png?raw=true)
+
 Example:
 
 ```html
