@@ -1,6 +1,10 @@
 {
   "name": "vo-location-selector",
+  "description": "Ui component for selecting a location on the map",
   "main": "polymer2-vo-location-selector.html",
+  "authors": [
+    "Timothy De Bock"
+  ],
   "dependencies": {
     "polymer": "Polymer/polymer#^2.0.0",
     "vaadin-lumo-styles": "^1.0.0",
