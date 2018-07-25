@@ -1,6 +1,9 @@
 # \<vo-location-selector\>
 
-Responsive Toolbar for selecting a lat long location on a map.
+Responsive Toolbar for selecting a lat long location on a map. It supports the following actions:
+- Search location using [AGIV Geolocation API](https://loc.geopunt.be/)
+- Go the current location with the [Geolocation API](https://developer.mozilla.org/en-US/docs/Web/API/Geolocation_API)
+- Choose a location from the map (The map tool should handle this after the event is fired)
 
 * wide view
 
