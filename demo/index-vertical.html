@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
 
-    <title>vo-search-location demo</title>
+    <title>polymer2-vo-location-selector-vertical</title>
 
     <script src="../../webcomponentsjs/webcomponents-loader.js"></script>
 
@@ -12,24 +12,36 @@
     <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
     <script src="../../paper-button/paper-button.html"></script>
 
-  <link rel="import" href="../polymer2-vo-location-selector.html">
+  <link rel="import" href="../polymer2-vo-location-selector-vertical.html">
 
   <custom-style>
     <style is="custom-style" include="demo-pages-shared-styles">
 
+
+      :root {
+        --lumo-base-color: red;
+
+        --lumo-contrast: red;
+      }
+
+
+      polymer2-vo-location-selector-vertical {
+        z-index: 9999;
+      }
+
     </style>
   </custom-style>
 
-  <title>polymer2-vo-location-selector</title>
+  <title>polymer2-vo-location-selector-vertical</title>
 </head>
-<!-- http://127.0.0.1:8081/components/vo-location-selector/demo/index.html -->
+<!-- http://127.0.0.1:8081/components/vo-location-selector/demo/index-vertical.html -->
 <body>
 <div class="vertical-section-container centered">
   <h3>Vo Location Selector</h3>
   <p>Resize the window to check the responsive design</p>
   <demo-snippet>
     <template>
-      <polymer2-vo-location-selector opened="true"></polymer2-vo-location-selector>
+      <polymer2-vo-location-selector-vertical button-bar-theme="" opened="true"></polymer2-vo-location-selector-vertical>
     </template>
   </demo-snippet>
 </div>
