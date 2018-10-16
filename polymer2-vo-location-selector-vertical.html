@@ -51,6 +51,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         grid-template-columns: repeat(1, 48px);
       }
 
+      #searchCloseButton {
+        color: var(--lumo-success-text-color);
+        min-width: 48px;
+        padding-right: 8px;
+        margin: 0;
+        height: 68px;
+      }
+
       #collapseSearch {
         max-width: 650px;
         width: 100%;
@@ -63,18 +71,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       vo-search-location {
         margin-left: 40px;
         margin-top: -68px;
-      }
-
-      vo-search-location iron-icon.clear-button {
-        --iron-icon-width: 20px;
-        --iron-icon-height: 20px;
-      }
-
-      paper-button.collapseSearchButton {
-        min-width: 48px;
-        padding-right: 8px;
-        margin: 0;
-        height: 68px;
       }
 
 
@@ -110,8 +106,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <!--search bar-->
    <iron-collapse id="collapseSearch" opened="{{searchActive}}">
-     <paper-button  class='collapseSearchButton' id="collapseSearchButton"  on-click="closeSearchBar">
-       <iron-icon icon="vo-location-icons:arrow-back"></iron-icon>
+     <paper-button id="searchCloseButton" on-click="closeSearchBar">
+       <iron-icon icon="vo-location-icons:done"></iron-icon>
      </paper-button>
      <vo-search-location on-search-location-changed="handleSearchLocationChange"
                          allow-custom-value="true"
