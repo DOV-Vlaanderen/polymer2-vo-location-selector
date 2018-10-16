@@ -18,13 +18,13 @@
     <style is="custom-style" include="demo-pages-shared-styles">
 
 
-      :root {
-        --lumo-base-color: white;
-      }
-
 
       vo-location-selector-vertical {
         z-index: 9999;
+      }
+
+      .demo {
+        display: none;
       }
 
     </style>
@@ -35,13 +35,15 @@
 <!-- http://127.0.0.1:8081/components/vo-location-selector/demo/index-vertical.html -->
 <body>
 <div class="vertical-section-container centered">
-  <h3>Vo Location Selector</h3>
+  <h3>Vo Location Selector Vertical</h3>
   <p>Resize the window to check the responsive design</p>
   <demo-snippet>
     <template>
-      <vo-location-selector-vertical button-bar-theme="" opened="true"></vo-location-selector-vertical>
+      <vo-location-selector-vertical class="demo"></vo-location-selector-vertical>
     </template>
   </demo-snippet>
+
+  <vo-location-selector-vertical button-bar-theme="" opened="true"></vo-location-selector-vertical>
 </div>
 </body>
 </html>

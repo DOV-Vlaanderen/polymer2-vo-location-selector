@@ -54,24 +54,27 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       #collapseSearch {
         max-width: 650px;
         width: 100%;
-        background: transparent;
+        background:  var(--lumo-base-color);
         position: fixed;
         bottom: 0px;
         right: 0px;
       }
 
       vo-search-location {
-        margin-left: 30px;
+        margin-left: 40px;
         margin-top: -68px;
-        background: var(--lumo-base-color);
+      }
+
+      vo-search-location iron-icon.clear-button {
+        --iron-icon-width: 20px;
+        --iron-icon-height: 20px;
       }
 
       paper-button.collapseSearchButton {
         min-width: 48px;
-        padding: 0;
+        padding-right: 8px;
         margin: 0;
         height: 68px;
-        background: var(--lumo-base-color);
       }
 
 
@@ -89,17 +92,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <div id="buttonbar">
 
         <paper-button class="toolButton"  id="searchButton" active="{{useCrab}}" on-click="handleSearchClicked">
-          <iron-icon icon="icons:search"></iron-icon>
+          <iron-icon icon="vo-location-icons:search"></iron-icon>
 
         </paper-button>
 
         <paper-button class="toolButton" active="{{useGeolocation}}" on-click="handleAutoLocationClicked">
-          <iron-icon icon="my-icons:my-location"></iron-icon>
+          <iron-icon icon="vo-location-icons:my-location"></iron-icon>
 
         </paper-button>
 
         <paper-button class="toolButton" active="{{useMap}}" on-click="handleChooseLocationClicked">
-          <iron-icon icon="my-icons:pin-drop"></iron-icon>
+          <iron-icon icon="vo-location-icons:pin-drop"></iron-icon>
 
         </paper-button>
       </div>
@@ -109,7 +112,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <!--search bar-->
    <iron-collapse id="collapseSearch" opened="{{searchActive}}">
      <paper-button  class='collapseSearchButton' id="collapseSearchButton"  on-click="closeSearchBar">
-       <iron-icon icon="icons:close"></iron-icon>
+       <iron-icon icon="vo-location-icons:arrow-back"></iron-icon>
      </paper-button>
      <vo-search-location on-search-location-changed="handleSearchLocationChange"
                          allow-custom-value="true"
@@ -169,6 +172,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       closeSearchBar() {
+          //todo clear address if it was filled when the search bar is shown
           this.$.collapseSearch.opened = false;
           this.$.collapseButtonbar.opened = true;
       }
@@ -181,7 +185,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       handleAutoLocationClicked() {
         this.useMap = false;
         this.useGeolocation = true;
-        this.disableSearch()
+        this.disableSearch();
 
       }
 
@@ -193,7 +197,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       handleChooseLocationClicked() {
         this.useGeolocation = false;
         this.useMap = true;
-        this.disableSearch()
+        this.disableSearch();
 
         this.fireLocationSelectLocation();
       }
@@ -237,7 +241,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
        * @param e
        */
       handleQueryChange(e){
-        this.phoneView= !e.detail.value
+        this.phoneView= !e.detail.value;
         if(this.phoneView) {
           this.$.collapseSearch.opened = false;
         } else {
