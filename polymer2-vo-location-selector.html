@@ -151,7 +151,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
        */
       handleSearchClicked() {
         this.$.collapseSearch.toggle();
-
         this.useCrab = true;
         this.useGeolocation = false;
         this.useMap = false;
@@ -178,8 +177,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       handleChooseLocationClicked() {
         this.useGeolocation = false;
         this.useMap = true;
-        this.disableSearch()
-
+        this.disableSearch();
         this.fireLocationSelectLocation();
       }
 

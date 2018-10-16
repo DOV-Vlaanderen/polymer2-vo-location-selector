@@ -80,7 +80,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     </style>
 
-
     <!--Button bar-->
     <iron-collapse id="collapseButtonbar" opened="{{opened}}" class="bottombar" theme$="[[buttonBarTheme]]">
       <geo-location on-position-changed="handleGeoLocationChange"
@@ -171,11 +170,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       }
 
-      closeSearchBar() {
-          //todo clear address if it was filled when the search bar is shown
-          this.$.collapseSearch.opened = false;
-          this.$.collapseButtonbar.opened = true;
-      }
 
       /**
        * Geolocation Button clicked event.
@@ -198,7 +192,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.useGeolocation = false;
         this.useMap = true;
         this.disableSearch();
-
         this.fireLocationSelectLocation();
       }
 
@@ -211,7 +204,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
        *
        */
       handleSearchLocationChange(event) {
-        //console.log("location Changed from crab.");
         //console.log("location:" + event.detail.latitude + " - " + event.detail.longitude);
         this.disableSearch();
         this.fireLocationUpdated("crab-search", event.detail.latitude, event.detail.longitude, 17);
@@ -236,19 +228,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }));
       }
 
-      /**
-       * Handle media query.
-       * @param e
-       */
-      handleQueryChange(e){
-        this.phoneView= !e.detail.value;
-        if(this.phoneView) {
-          this.$.collapseSearch.opened = false;
-        } else {
-          this.handleSearchClicked();
-          this.$.collapseSearch.opened = true;
-        }
-      }
       //-----------------------------------------------------------------------------------------------//
       //-- Fire events --------------------------------------------------------------------------------//
       //-----------------------------------------------------------------------------------------------//
@@ -275,11 +254,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       //-- Private ------------------------------------------------------------------------------------//
       //-----------------------------------------------------------------------------------------------//
 
+      closeSearchBar() {
+          //todo clear address if it was filled when the search bar is shown
+          this.$.collapseSearch.opened = false;
+          this.$.collapseButtonbar.opened = true;
+      }
+
       disableSearch(){
         this.useCrab = false;
-        if(this.phoneView) {
-          this.$.collapseSearch.opened = false;
-        }
+        this.$.collapseSearch.opened = false;
+        this.$.collapseButtonbar.opened = true;
+
       }
     }
 
