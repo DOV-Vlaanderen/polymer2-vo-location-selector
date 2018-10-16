@@ -22,248 +22,259 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 
 <dom-module id="vo-location-selector-vertical">
-  <template>
-    <style include="lumo-color">
-      :host {
-        display: block;
-        width: 100%;
-      }
+    <template>
+        <style include="lumo-color">
+            :host {
+                display: block;
+                width: 100%;
+            }
 
-      .bottombar {
-        width: 48px;
-        background-color: var(--lumo-base-color);
-        color: var(--lumo-contrast);
-        border-radius: 3px;
-        position: absolute;
-        right: 16px;
-      }
-
-
-      paper-button.toolButton {
-        min-width: 48px;
-        padding: 10px;
-        margin: 0;
-
-      }
-
-      #buttonbar {
-        display: grid;
-        grid-template-columns: repeat(1, 48px);
-      }
-
-      #searchCloseButton {
-        color: var(--lumo-success-text-color);
-        min-width: 48px;
-        padding-right: 8px;
-        margin: 0;
-        height: 68px;
-      }
-
-      #collapseSearch {
-        max-width: 650px;
-        width: 100%;
-        background:  var(--lumo-base-color);
-        position: fixed;
-        bottom: 0px;
-        right: 0px;
-      }
-
-      vo-search-location {
-        margin-left: 40px;
-        margin-top: -68px;
-      }
+            .bottombar {
+                width: 48px;
+                background-color: var(--lumo-base-color);
+                color: var(--lumo-contrast);
+                border-radius: 3px;
+                position: absolute;
+                right: 16px;
+            }
 
 
-    </style>
+            paper-button.toolButton {
+                min-width: 48px;
+                padding: 10px;
+                margin: 0;
 
-    <!--Button bar-->
-    <iron-collapse id="collapseButtonbar" opened="{{opened}}" class="bottombar" theme$="[[buttonBarTheme]]">
-      <geo-location on-position-changed="handleGeoLocationChange"
-                    on-geo-error="handleGeoLocationError"
-                    idle="[[!useGeolocation]]">
+            }
 
-      </geo-location>
+            #buttonbar {
+                display: grid;
+                grid-template-columns: repeat(1, 48px);
+            }
 
-      <div id="buttonbar">
+            #searchCloseButton {
+                color: var(--lumo-success-text-color);
+                min-width: 48px;
+                padding-right: 8px;
+                margin: 0;
+                height: 68px;
+            }
 
-        <paper-button class="toolButton"  id="searchButton" active="{{useCrab}}" on-click="handleSearchClicked">
-          <iron-icon icon="vo-location-icons:search"></iron-icon>
+            #collapseSearch {
+                max-width: 650px;
+                width: 100%;
+                background:  var(--lumo-base-color);
+                position: fixed;
+                bottom: 0px;
+                right: 0px;
+            }
 
-        </paper-button>
-
-        <paper-button class="toolButton" active="{{useGeolocation}}" on-click="handleAutoLocationClicked">
-          <iron-icon icon="vo-location-icons:my-location"></iron-icon>
-
-        </paper-button>
-
-        <paper-button class="toolButton" active="{{useMap}}" on-click="handleChooseLocationClicked">
-          <iron-icon icon="vo-location-icons:pin-drop"></iron-icon>
-
-        </paper-button>
-      </div>
-    </iron-collapse>
-
-
-    <!--search bar-->
-   <iron-collapse id="collapseSearch" opened="{{searchActive}}">
-     <paper-button id="searchCloseButton" on-click="closeSearchBar">
-       <iron-icon icon="vo-location-icons:done"></iron-icon>
-     </paper-button>
-     <vo-search-location on-search-location-changed="handleSearchLocationChange"
-                         allow-custom-value="true"
-                         focus="{{searchActive}}">
-     </vo-search-location>
-  </iron-collapse>
-
-  </template>
-
-  <script>
-    class VoMapLocationSelectorVertical extends Polymer.Element {
-      static get is() {
-        return 'vo-location-selector-vertical';
-      }
-
-      static get properties() {
-        return {
-          useGeolocation: {
-            type: Boolean,
-            value: false
-          },
-          useMap: {
-            type: Boolean,
-            value: false
-          },
-          useCrab: {
-            type: Boolean,
-            value: false
-          },
-          buttonBarTheme: {
-            type: String,
-            value: "dark"
-          },
-          opened : {
-            type: Boolean,
-            value: false
-          }
-        };
-      }
+            vo-search-location {
+                margin-left: 40px;
+                margin-top: -68px;
+            }
 
 
-      //-----------------------------------------------------------------------------------------------//
-      //-- Handle Buttons Clicks  ------------ --------------------------------------------------------//
-      //-----------------------------------------------------------------------------------------------//
-      /**
-       * Search Button clicked event.
-       * @param event
-       * @param object
-       */
-      handleSearchClicked() {
-        this.$.collapseSearch.opened = true;
-        this.$.collapseButtonbar.opened = false;
-        this.useCrab = true;
-        this.useGeolocation = false;
-        this.useMap = false;
+        </style>
 
-      }
+        <!--Button bar-->
+        <iron-collapse id="collapseButtonbar" opened="{{opened}}" class="bottombar" theme$="[[buttonBarTheme]]">
+            <geo-location on-position-changed="handleGeoLocationChange"
+                          on-geo-error="handleGeoLocationError"
+                          idle="[[!useGeolocation]]">
 
+            </geo-location>
 
-      /**
-       * Geolocation Button clicked event.
-       * @param event
-       * @param object
-       */
-      handleAutoLocationClicked() {
-        this.useMap = false;
-        this.useGeolocation = true;
-        this.disableSearch();
+            <div id="buttonbar">
 
-      }
+                <paper-button class="toolButton"  id="searchButton" active="{{useCrab}}" on-click="handleSearchClicked">
+                    <iron-icon icon="vo-location-icons:search"></iron-icon>
 
-      /**
-       * Place Marker Button clicked event.
-       * @param event
-       * @param object
-       */
-      handleChooseLocationClicked() {
-        this.useGeolocation = false;
-        this.useMap = true;
-        this.disableSearch();
-        this.fireLocationSelectLocation();
-      }
+                </paper-button>
 
-      //-----------------------------------------------------------------------------------------------//
-      //-- Handle events from child components --------------------------------------------------------//
-      //-----------------------------------------------------------------------------------------------//
+                <paper-button class="toolButton" active="{{useGeolocation}}" on-click="handleAutoLocationClicked">
+                    <iron-icon icon="vo-location-icons:my-location"></iron-icon>
 
-      /**
-       * Handle Crab Search event: location change.
-       *
-       */
-      handleSearchLocationChange(event) {
-        //console.log("location:" + event.detail.latitude + " - " + event.detail.longitude);
-        this.disableSearch();
-        this.fireLocationUpdated("crab-search", event.detail.latitude, event.detail.longitude, 17);
-      }
+                </paper-button>
+
+                <paper-button class="toolButton" active="{{useMap}}" on-click="handleChooseLocationClicked">
+                    <iron-icon icon="vo-location-icons:pin-drop"></iron-icon>
+
+                </paper-button>
+            </div>
+        </iron-collapse>
 
 
-      /**
-       * Handle Geolocation event: location change.
-       * */
-      handleGeoLocationChange(event, object) {
-        if (object.value && this.useGeolocation) {
-          //console.log("Navigating to geolocator point");
-          //console.log("location:" + object.value.coords.latitude + " - " + object.value.coords.longitude);
-          this.fireLocationUpdated("geolocation-api", object.value.coords.latitude, object.value.coords.longitude, 17);
+        <!--search bar-->
+        <iron-collapse id="collapseSearch" opened="{{searchActive}}">
+            <paper-button id="searchCloseButton" on-click="closeSearchBar">
+                <iron-icon icon="vo-location-icons:done"></iron-icon>
+            </paper-button>
+            <vo-search-location on-search-location-changed="handleSearchLocationChange"
+                                allow-custom-value="true"
+                                focus="{{searchActive}}">
+            </vo-search-location>
+        </iron-collapse>
+
+    </template>
+
+    <script>
+        class VoMapLocationSelectorVertical extends Polymer.Element {
+            static get is() {
+                return 'vo-location-selector-vertical';
+            }
+
+            static get properties() {
+                return {
+                    useGeolocation: {
+                        type: Boolean,
+                        value: false
+                    },
+                    useMap: {
+                        type: Boolean,
+                        value: false
+                    },
+                    useCrab: {
+                        type: Boolean,
+                        value: false
+                    },
+                    buttonBarTheme: {
+                        type: String,
+                        value: "dark"
+                    },
+                    opened : {
+                        type: Boolean,
+                        value: false
+                    }
+                };
+            }
+
+
+            //-----------------------------------------------------------------------------------------------//
+            //-- Handle Buttons Clicks  ------------ --------------------------------------------------------//
+            //-----------------------------------------------------------------------------------------------//
+            /**
+             * Search Button clicked event.
+             * @param event
+             * @param object
+             */
+            handleSearchClicked() {
+                this.setSeachBarVisible(true);
+                this.useCrab = true;
+                this.useGeolocation = false;
+                this.useMap = false;
+
+
+            }
+
+
+            /**
+             * Geolocation Button clicked event.
+             * @param event
+             * @param object
+             */
+            handleAutoLocationClicked() {
+                this.useMap = false;
+                this.useGeolocation = true;
+                this.disableSearch();
+
+            }
+
+            /**
+             * Place Marker Button clicked event.
+             * @param event
+             * @param object
+             */
+            handleChooseLocationClicked() {
+                this.useGeolocation = false;
+                this.useMap = true;
+                this.disableSearch();
+                this.fireLocationSelectLocation();
+            }
+
+            //-----------------------------------------------------------------------------------------------//
+            //-- Handle events from child components --------------------------------------------------------//
+            //-----------------------------------------------------------------------------------------------//
+
+            /**
+             * Handle Crab Search event: location change.
+             *
+             */
+            handleSearchLocationChange(event) {
+                //console.log("location:" + event.detail.latitude + " - " + event.detail.longitude);
+                this.disableSearch();
+                this.fireLocationUpdated("crab-search", event.detail.latitude, event.detail.longitude, 17);
+            }
+
+
+            /**
+             * Handle Geolocation event: location change.
+             * */
+            handleGeoLocationChange(event, object) {
+                if (object.value && this.useGeolocation) {
+                    //console.log("Navigating to geolocator point");
+                    //console.log("location:" + object.value.coords.latitude + " - " + object.value.coords.longitude);
+                    this.fireLocationUpdated("geolocation-api", object.value.coords.latitude, object.value.coords.longitude, 17);
+                }
+            }
+
+
+            handleGeoLocationError(e) {
+                this.dispatchEvent(new CustomEvent('geo-error', {
+                    detail: e.detail
+                }));
+            }
+
+            //-----------------------------------------------------------------------------------------------//
+            //-- Fire events --------------------------------------------------------------------------------//
+            //-----------------------------------------------------------------------------------------------//
+
+            fireLocationUpdated(source, lat, long, zoom) {
+                this.dispatchEvent(new CustomEvent('location-updated', {
+                    detail: {
+                        source: source,
+                        latitude: lat,
+                        longitude: long,
+                        zoom: zoom
+                    }
+                }));
+            }
+
+            fireLocationSelectLocation() {
+                this.dispatchEvent(new CustomEvent('start-location-selection', {
+                    detail: {
+                    }
+                }));
+            }
+
+            fireSearchBarVisibilityChange(visible) {
+                this.dispatchEvent(new CustomEvent('search-bar-visibility-changed', {
+                    detail: {
+                        value: visible
+                    }
+                }));
+            }
+
+            //-----------------------------------------------------------------------------------------------//
+            //-- Private ------------------------------------------------------------------------------------//
+            //-----------------------------------------------------------------------------------------------//
+
+            closeSearchBar() {
+                //todo clear address if it was filled when the search bar is shown
+                this.setSeachBarVisible(false);
+            }
+
+            disableSearch(){
+                this.useCrab = false;
+                this.setSeachBarVisible(false);
+            }
+
+            setSeachBarVisible(visible) {
+                this.$.collapseSearch.opened = visible;
+                this.$.collapseButtonbar.opened = !visible;
+                this.fireSearchBarVisibilityChange(visible);
+            }
         }
-      }
 
-
-      handleGeoLocationError(e) {
-        this.dispatchEvent(new CustomEvent('geo-error', {
-          detail: e.detail
-        }));
-      }
-
-      //-----------------------------------------------------------------------------------------------//
-      //-- Fire events --------------------------------------------------------------------------------//
-      //-----------------------------------------------------------------------------------------------//
-
-      fireLocationUpdated(source, lat, long, zoom) {
-        this.dispatchEvent(new CustomEvent('location-updated', {
-          detail: {
-            source: source,
-            latitude: lat,
-            longitude: long,
-            zoom: zoom
-          }
-        }));
-      }
-
-      fireLocationSelectLocation() {
-        this.dispatchEvent(new CustomEvent('start-location-selection', {
-          detail: {
-          }
-        }));
-      }
-
-      //-----------------------------------------------------------------------------------------------//
-      //-- Private ------------------------------------------------------------------------------------//
-      //-----------------------------------------------------------------------------------------------//
-
-      closeSearchBar() {
-          //todo clear address if it was filled when the search bar is shown
-          this.$.collapseSearch.opened = false;
-          this.$.collapseButtonbar.opened = true;
-      }
-
-      disableSearch(){
-        this.useCrab = false;
-        this.$.collapseSearch.opened = false;
-        this.$.collapseButtonbar.opened = true;
-
-      }
-    }
-
-    window.customElements.define(VoMapLocationSelectorVertical.is, VoMapLocationSelectorVertical);
-  </script>
+        window.customElements.define(VoMapLocationSelectorVertical.is, VoMapLocationSelectorVertical);
+    </script>
 </dom-module>
