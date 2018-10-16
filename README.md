@@ -1,4 +1,4 @@
-# \<polymer2-vo-location-selector\>
+# \<vo-location-selector\>
 Responsive Toolbar for selecting a lat long location on a map. It supports the following actions:
 - Search location using [AGIV Geolocation API](https://loc.geopunt.be/)
 - Go the current location with the [Geolocation API](https://developer.mozilla.org/en-US/docs/Web/API/Geolocation_API)
@@ -18,17 +18,17 @@ Example:
 
 ```html
 
-    <polymer2-vo-location-selector></polymer2-vo-location-selector>
+    <location-selector><vo-location-selector>
 
 ```
 
-# \<polymer2-vo-location-selector-vertical\>
+# \<vo-location-selector-vertical\>
 
-* has the same functionality as above but it is vertically aligned
+* has the same functionality as above widget. The main difference is that the toolbar is aligned vertically and the searchbar is fixed at the bottom.
 
 ```html
 
-    <polymer2-vo-location-selector-vertical button-bar-theme="" opened="true"></polymer2-vo-location-selector-vertical>
+    <vo-location-selector-vertical button-bar-theme="" opened="true"></vo-location-selector-vertical>
 
 ```
 
