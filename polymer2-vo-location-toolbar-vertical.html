@@ -1,0 +1,139 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../geo-location/geo-location.html">
+<link rel="import" href="../paper-button/paper-button.html">
+<link rel="import" href="../vo-search-location/vo-search-location.html">
+<link rel="import" href="../iron-icon/iron-icon.html">
+<link rel="import" href="../iron-collapse/iron-collapse.html">
+<link rel="import" href="../iron-media-query/iron-media-query.html">
+
+<link rel="import" href="../vaadin-lumo-styles/color.html">
+
+<link rel="import" href="polymer2-vo-location-selector-icons.html">
+
+
+<dom-module id="vo-location-toolbar-vertical">
+    <template>
+        <style include="lumo-color">
+            :host {
+                display: block;
+            }
+
+            #collapseButtonbar {
+                width: 48px;
+                background-color: var(--lumo-base-color);
+                color: var(--lumo-contrast);
+                border-radius: 3px;
+                position: absolute;
+                right: 16px;
+            }
+
+
+            paper-button.toolButton {
+                min-width: 48px;
+                padding: 10px;
+                margin: 0;
+
+            }
+
+            #buttonbar {
+                display: grid;
+                grid-template-columns: repeat(1, 48px);
+            }
+
+
+        </style>
+
+        <!--search toolbar-->
+        <iron-collapse id="collapseButtonbar" opened theme$="[[buttonBarTheme]]">
+
+            <div id="buttonbar">
+
+                <paper-button class="toolButton"  id="searchButton" on-click="handleSearchClicked">
+                    <iron-icon icon="vo-location-icons:search"></iron-icon>
+
+                </paper-button>
+
+                <paper-button class="toolButton" on-click="handleAutoLocationClicked">
+                    <iron-icon icon="vo-location-icons:my-location"></iron-icon>
+
+                </paper-button>
+
+                <paper-button class="toolButton"  on-click="handleChooseLocationClicked">
+                    <iron-icon icon="vo-location-icons:pin-drop"></iron-icon>
+
+                </paper-button>
+            </div>
+        </iron-collapse>
+
+    </template>
+
+    <script>
+        class VoMapLocationToolbarVertical extends Polymer.Element {
+            static get is() {
+                return 'vo-location-toolbar-vertical';
+            }
+
+            static get properties() {
+                return {
+                    buttonBarTheme: {
+                        type: String,
+                        value: ""
+                    },
+
+                    visible : {
+                        type: Boolean,
+                        value: true
+                    }
+
+                };
+            }
+
+            //-----------------------------------------------------------------------------------------------//
+            //-- Handle Button Clicks  ------------ --------------------------------------------------------//
+            //-----------------------------------------------------------------------------------------------//
+
+            handleSearchClicked() {
+                this.fireToolbarButtonClicked('search-location');
+            }
+
+
+
+            handleAutoLocationClicked() {
+                this.fireToolbarButtonClicked('geolocation');
+            }
+
+            handleChooseLocationClicked() {
+                this.fireToolbarButtonClicked('choose-location');
+            }
+
+            setVisible(visible) {
+                this.$.collapseButtonbar.opened = visible;
+            }
+
+            //-----------------------------------------------------------------------------------------------//
+            //-- Fire events --------------------------------------------------------------------------------//
+            //-----------------------------------------------------------------------------------------------//
+
+
+            fireToolbarButtonClicked(type) {
+                this.dispatchEvent(new CustomEvent('button-clicked', {
+                    detail: {
+                        buttonType: type
+                    }
+                }));
+            }
+        }
+
+        window.customElements.define(VoMapLocationToolbarVertical.is, VoMapLocationToolbarVertical);
+    </script>
+</dom-module>

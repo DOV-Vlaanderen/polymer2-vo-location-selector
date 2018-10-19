@@ -21,34 +21,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="polymer2-vo-location-selector-icons.html">
 
 
-<dom-module id="vo-location-selector-vertical">
+<dom-module id="vo-location-widget">
     <template>
         <style include="lumo-color">
             :host {
                 display: block;
-                width: 100%;
-            }
-
-            .bottombar {
-                width: 48px;
-                background-color: var(--lumo-base-color);
-                color: var(--lumo-contrast);
-                border-radius: 3px;
-                position: absolute;
-                right: 16px;
-            }
-
-
-            paper-button.toolButton {
-                min-width: 48px;
-                padding: 10px;
-                margin: 0;
-
-            }
-
-            #buttonbar {
-                display: grid;
-                grid-template-columns: repeat(1, 48px);
             }
 
             #searchCloseButton {
@@ -57,73 +34,47 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 width: 48px;
                 padding: 8px;
                 margin: 0;
-                height: 48px;
                 display: inline-block;
-
             }
 
             #collapseSearch {
-                max-width: 650px;
-                width: 100%;
                 background:  var(--lumo-base-color);
-                position: fixed;
-                bottom: 0px;
-                right: 0px;
+                height: 48px;
             }
 
             vo-search-location {
-                display: inline-block;
                 width: calc(100% - 64px);
+                display: inline-block;
             }
 
 
         </style>
 
-        <!--Button bar-->
-        <iron-collapse id="collapseButtonbar" opened="{{opened}}" class="bottombar" theme$="[[buttonBarTheme]]">
+
+        <!--search box-->
+        <iron-collapse id="collapseSearch">
             <geo-location on-position-changed="handleGeoLocationChange"
                           on-geo-error="handleGeoLocationError"
                           idle="[[!useGeolocation]]">
 
             </geo-location>
 
-            <div id="buttonbar">
-
-                <paper-button class="toolButton"  id="searchButton" active="{{useCrab}}" on-click="handleSearchClicked">
-                    <iron-icon icon="vo-location-icons:search"></iron-icon>
-
-                </paper-button>
-
-                <paper-button class="toolButton" active="{{useGeolocation}}" on-click="handleAutoLocationClicked">
-                    <iron-icon icon="vo-location-icons:my-location"></iron-icon>
-
-                </paper-button>
-
-                <paper-button class="toolButton" active="{{useMap}}" on-click="handleChooseLocationClicked">
-                    <iron-icon icon="vo-location-icons:pin-drop"></iron-icon>
-
-                </paper-button>
-            </div>
-        </iron-collapse>
-
-
-        <!--search bar-->
-        <iron-collapse id="collapseSearch" opened="{{searchActive}}">
-            <paper-button id="searchCloseButton" on-click="closeSearchBar">
+            <paper-button id="searchCloseButton" on-click="closeSearchBox">
                 <iron-icon icon="vo-location-icons:done"></iron-icon>
             </paper-button>
+
             <vo-search-location on-search-location-changed="handleSearchLocationChange"
                                 allow-custom-value="true"
-                                focus="{{searchActive}}">
+                                focus="{{visible}}">
             </vo-search-location>
         </iron-collapse>
 
     </template>
 
     <script>
-        class VoMapLocationSelectorVertical extends Polymer.Element {
+        class VoLocationWidget extends Polymer.Element {
             static get is() {
-                return 'vo-location-selector-vertical';
+                return 'vo-location-widget';
             }
 
             static get properties() {
@@ -131,68 +82,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     useGeolocation: {
                         type: Boolean,
                         value: false
-                    },
-                    useMap: {
-                        type: Boolean,
-                        value: false
-                    },
-                    useCrab: {
-                        type: Boolean,
-                        value: false
-                    },
-                    buttonBarTheme: {
-                        type: String,
-                        value: "dark"
-                    },
-                    opened : {
-                        type: Boolean,
-                        value: false
                     }
+
                 };
             }
 
-
-            //-----------------------------------------------------------------------------------------------//
-            //-- Handle Buttons Clicks  ------------ --------------------------------------------------------//
-            //-----------------------------------------------------------------------------------------------//
-            /**
-             * Search Button clicked event.
-             * @param event
-             * @param object
-             */
-            handleSearchClicked() {
-                this.setSeachBarVisible(true);
-                this.useCrab = true;
+            selectViaSearchBox() {
+                this.setSeachboxVisible(true);
                 this.useGeolocation = false;
-                this.useMap = false;
-
-
             }
 
 
-            /**
-             * Geolocation Button clicked event.
-             * @param event
-             * @param object
-             */
-            handleAutoLocationClicked() {
-                this.useMap = false;
+            selectGeolocation() {
                 this.useGeolocation = true;
-                this.disableSearch();
-
             }
 
-            /**
-             * Place Marker Button clicked event.
-             * @param event
-             * @param object
-             */
-            handleChooseLocationClicked() {
+            selectLocationManually() {
                 this.useGeolocation = false;
-                this.useMap = true;
-                this.disableSearch();
-                this.fireLocationSelectLocation();
             }
+
 
             //-----------------------------------------------------------------------------------------------//
             //-- Handle events from child components --------------------------------------------------------//
@@ -203,10 +111,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
              *
              */
             handleSearchLocationChange(event) {
-                //console.log("location:" + event.detail.latitude + " - " + event.detail.longitude);
-                this.disableSearch();
+                this.closeSearchBox();
                 this.fireLocationUpdated("crab-search", event.detail.latitude, event.detail.longitude, 17);
             }
+
 
 
             /**
@@ -242,15 +150,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 }));
             }
 
-            fireLocationSelectLocation() {
-                this.dispatchEvent(new CustomEvent('start-location-selection', {
-                    detail: {
-                    }
-                }));
-            }
-
-            fireSearchBarVisibilityChange(visible) {
-                this.dispatchEvent(new CustomEvent('search-bar-visibility-changed', {
+            fireSearchboxVisibilityChange(visible) {
+                this.dispatchEvent(new CustomEvent('search-box-visibility-changed', {
                     detail: {
                         value: visible
                     }
@@ -261,23 +162,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             //-- Private ------------------------------------------------------------------------------------//
             //-----------------------------------------------------------------------------------------------//
 
-            closeSearchBar() {
-                //todo clear address if it was filled when the search bar is shown
-                this.setSeachBarVisible(false);
+            closeSearchBox() {
+                this.setSeachboxVisible(false);
             }
 
-            disableSearch(){
-                this.useCrab = false;
-                this.setSeachBarVisible(false);
-            }
-
-            setSeachBarVisible(visible) {
-                this.$.collapseSearch.opened = visible;
-                this.$.collapseButtonbar.opened = !visible;
-                this.fireSearchBarVisibilityChange(visible);
+            setSeachboxVisible(visible) {
+                if (this.$.collapseSearch.opened != visible) {
+                    this.$.collapseSearch.opened = visible;
+                    this.fireSearchboxVisibilityChange(visible);
+                }
             }
         }
 
-        window.customElements.define(VoMapLocationSelectorVertical.is, VoMapLocationSelectorVertical);
+        window.customElements.define(VoLocationWidget.is, VoLocationWidget);
     </script>
 </dom-module>
