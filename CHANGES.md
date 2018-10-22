@@ -1,3 +1,10 @@
+0.0.4
+======
+* use display-block to position elements
+* **vo-location-selector-vertical** chanded into two components: **vo-location-toolbar-vertical** and **vo-location-widget**
+* upgrade version of polymer2-vo-search-location
+
+
 0.0.3
 ======
 * added of **vo-location-selector-vertical** widget
