@@ -52,10 +52,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         <!--search box-->
         <iron-collapse id="collapseSearch">
-            <geo-location on-position-changed="handleGeoLocationChange"
+            <geo-location timeout="1000" latitude="{{geoLocationLat}}" longitude="{{geoLocationLong}}" watch-pos high-accuracy on-position-changed="handleGeoLocationChange"
                           on-geo-error="handleGeoLocationError"
                           idle="[[!useGeolocation]]">
-
             </geo-location>
 
             <paper-button id="searchCloseButton" on-click="closeSearchBox">
@@ -80,8 +79,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 return {
                     useGeolocation: {
                         type: Boolean,
-                        value: false
+                        value: true
+                    },
+
+                    geoLocationLat: {
+                        type: Number,
+                        notify: true,
+                        reflectToAttribute: true,
+                        value: null
+                    },
+
+                    geoLocationLong: {
+                        type: Number,
+                        notify: true,
+                        reflectToAttribute: true,
+                        value: null
                     }
+
+
 
                 };
             }
@@ -90,7 +105,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 this.setSeachboxVisible(true);
                 this.useGeolocation = false;
             }
-
 
             selectGeolocation() {
                 this.useGeolocation = true;
@@ -104,6 +118,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             //-----------------------------------------------------------------------------------------------//
             //-- Handle events from child components --------------------------------------------------------//
             //-----------------------------------------------------------------------------------------------//
+
+
+            _handleLatLonChange(oldVal, newVal) {
+                console.log('_handleLatLonChange', this.latitude, this.longitude);
+            }
 
             /**
              * Handle Crab Search event: location change.
@@ -121,8 +140,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
              * */
             handleGeoLocationChange(event, object) {
                 if (object.value && this.useGeolocation) {
-                    //console.log("Navigating to geolocator point");
-                    //console.log("location:" + object.value.coords.latitude + " - " + object.value.coords.longitude);
                     this.fireLocationUpdated("geolocation-api", object.value.coords.latitude, object.value.coords.longitude, 17);
                 }
             }
@@ -156,10 +173,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     }
                 }));
             }
-
-            //-----------------------------------------------------------------------------------------------//
-            //-- Private ------------------------------------------------------------------------------------//
-            //-----------------------------------------------------------------------------------------------//
 
             closeSearchBox() {
                 this.setSeachboxVisible(false);

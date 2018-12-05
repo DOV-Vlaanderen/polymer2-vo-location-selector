@@ -1,3 +1,8 @@
+0.0.5
+======
+* watch-pos and high-accuracy set to true in polymer2-vo-location-widget
+* geoLocationLat and geoLocationLong properties added 
+
 0.0.4
 ======
 * use display-block to position elements
